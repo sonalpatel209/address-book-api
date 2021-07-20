@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: AddressBookAPI
+  config:
+    activate:
+      on-profile: default
+  data:
+    mongodb:
+      host: localhost
+      port: '27017'
+      database: rtech
+      repositories:
+        enabled: 'true'
+springdoc:
+  swagger-ui:
+    disable-swagger-default-url: 'true'
+server:
+  error:
+    include-stacktrace: NEVER
+
+---
+spring:
+  config:
+    activate:
+      on-profile: test

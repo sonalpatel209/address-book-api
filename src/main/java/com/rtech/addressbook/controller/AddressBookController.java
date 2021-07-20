@@ -1,20 +1,13 @@
 package com.rtech.addressbook.controller;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.rtech.addressbook.model.Address;
 import com.rtech.addressbook.service.AddressService;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/rtech/v1/addresses")
@@ -25,31 +18,47 @@ public class AddressBookController {
 		this.addressService = addressService;
 	}
 
-	@GetMapping("/")
-	public ResponseEntity<List<Address>> getAllAddress() {
-		return ResponseEntity.ok(this.addressService.getAllAddress());
+	@GetMapping
+	@ResponseStatus(HttpStatus.OK)
+	@ApiOperation("Fetch all Address")
+	public List<Address> getAllAddress() {
+		return this.addressService.getAllAddress();
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Optional<Address>> getById(@PathVariable Integer id) {
-		return ResponseEntity.ok(this.addressService.getAddressById(id));
+	@ApiOperation("Fetch Address by ID")
+	@ResponseStatus(HttpStatus.OK)
+	public Address getById(
+			@ApiParam(value = "Address ID")
+			@PathVariable(value = "id") String id) {
+		return this.addressService.getAddressById(id);
 	}
 
-	@GetMapping("/city/{city}")
-	public ResponseEntity<List<Address>> getByCity(@PathVariable String city) {
-		return ResponseEntity.ok(this.addressService.getAddressByCity(city));
+	@ApiOperation("Search Address by City")
+	@GetMapping("/search")
+	public List<Address> searchByCity(
+			@ApiParam(value = "City Name")
+			@RequestParam(value = "city") String city) {
+		return this.addressService.getAddressByCity(city);
 	}
 
-	@PutMapping()
-	public ResponseEntity<Void> updateAddress(@RequestBody Address address) {
-		this.addressService.updateAddress(address);
-		return ResponseEntity.ok().build();
+	@ApiOperation("Update Address")
+	@PutMapping("/{id}")
+	public Address updateAddress(
+			@ApiParam(value = "Address ID")
+			@PathVariable(value = "id") String id,
+			@RequestBody Address address) {
+		address.setId(id);
+		return this.addressService.updateAddress(address);
 	}
 
+	@ApiOperation("Delete Address by ID")
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> deleteAddress(@PathVariable Integer id) {
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void deleteAddress(
+			@ApiParam(value = "Address ID")
+			@PathVariable(value = "id") String id) {
 		this.addressService.deleteAddressById(id);
-		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
 
 }
