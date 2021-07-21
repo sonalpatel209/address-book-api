@@ -16,8 +16,8 @@ public class AddressService {
 		this.addressRepository = addressRepository;
 	}
 
-	public void addAddress(Address address) {
-		this.addressRepository.insert(address);
+	public Address addAddress(Address address) {
+		return this.addressRepository.insert(address);
 	}
 
 	public Address updateAddress(Address address) {

@@ -52,6 +52,14 @@ public class AddressBookController {
 		return this.addressService.updateAddress(address);
 	}
 
+	@ApiOperation("Add Address")
+	@PostMapping("/")
+	public Address addAddress(
+			@RequestBody Address address) {
+		return this.addressService.addAddress(address);
+	}
+
+
 	@ApiOperation("Delete Address by ID")
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
